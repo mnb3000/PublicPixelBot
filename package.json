@@ -4,7 +4,9 @@
   "description": "Бот дефит территорию в PixelBattle",
   "main": "Back.js",
   "dependencies": {
-    "fastify": "^1.12.1"
+    "fastify": "^1.12.1",
+    "fastify-cors": "^0.1.0",
+    "node-json-db": "^0.9.1"
   },
   "devDependencies": {},
   "scripts": {
