@@ -35,7 +35,7 @@ fastify.post('/start', startOpts, (request, reply) => {
   }
 });
 
-fastify.listen(8080, (err, address) => {
+fastify.listen(8080, '0.0.0.0', (err, address) => {
   if (err) throw err;
   fastify.log.info(`server listening on ${address}`)
 });
