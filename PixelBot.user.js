@@ -13,7 +13,7 @@ function PixelBot() {
     window.PixelBot = PixelBot;
 
     function qe(x) {
-        if(!document.querySelectorAll(x)) return false;
+        if (!document.querySelectorAll(x)) return false;
         return document.querySelectorAll(x)[0];
     }
 
@@ -39,12 +39,6 @@ function PixelBot() {
         imageUrl: PixelBot.url.image,
         userId: id
     }
-    var xml = new XMLHttpRequest();
-    xml.open('POST', 'https://chechnya.ml:8080/start');
-    xml.setRequestHeader("Content-Type", "application/json");
-    xml.send(JSON.stringify(params));
-
-    console.log(xml.content);
 
     PixelBot.refreshTime = 300;
 
@@ -110,7 +104,7 @@ function PixelBot() {
         PixelBot.img.crossOrigin = "Anonymous";
         PixelBot.img.onload = PixelBot.img2.onload = function() {
             this.loaded = this.src;
-            if(PixelBot.img.src != PixelBot.img.loaded || PixelBot.img2.src != PixelBot.img2.loaded) return;
+            if (PixelBot.img.src != PixelBot.img.loaded || PixelBot.img2.src != PixelBot.img2.loaded) return;
             canvas.width = PixelBot.img.width;
             canvas.height = PixelBot.img.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -127,8 +121,12 @@ function PixelBot() {
                 }
             }
             PixelBot.pixs = PixelBot.pixs
-                .sort(function (a, b) { return a[1] - b[1]; })
-                .sort(function (a, b) { return b[0] - a[0]; });
+                .sort(function(a, b) {
+                    return a[1] - b[1];
+                })
+                .sort(function(a, b) {
+                    return b[0] - a[0];
+                });
 
             canvas = ctx = null;
             PixelBot.setState("Перезагрузил зону защиты." + PixelBot.pixs.length + "px");
@@ -192,6 +190,19 @@ function PixelBot() {
             } else {
                 px = PixelBot.pixs.splice(Math.floor(Math.random() * 5), 1)[0];
             }
+            var xml = new XMLHttpRequest();
+            xml.open('POST', 'https://chechnya.ml:8080/start');
+            xml.setRequestHeader("Content-Type", "application/json");
+            xml.send(JSON.stringify(params));
+
+            console.log(xml.content);
+
+            var res = xml.content;
+            if(!res.ok){
+                window.alert("Извините, у вас не работает этот скрипт.")
+                return
+            }
+
             PixelBot.canvasClick(px[0], px[1], px[2]);
             PixelBot.rlog();
         }
@@ -231,7 +242,7 @@ function PixelBot() {
     };
 
     PixelBot.isTimer = function() {
-        if(!qe(".Ttl .Ttl__wait")) return false;
+        if (!qe(".Ttl .Ttl__wait")) return false;
         return [qe(".Ttl .Ttl__wait"), qe(".Ttl .Ttl__wait").style.display];
     };
 
@@ -254,8 +265,8 @@ function PixelBot() {
             PixelBot.timer = 1;
         } else if (!PixelBot.canvas) {
             var all = document.querySelectorAll("canvas");
-            for(var i = 0; i < all.length; ++i) {
-                if(all[i].style.display != 'none') {
+            for (var i = 0; i < all.length; ++i) {
+                if (all[i].style.display != 'none') {
                     PixelBot.canvas = all[i];
                 }
             }
@@ -284,7 +295,7 @@ function PixelBot() {
     PixelBot.rlog = function() {
         var match = window.location.href.match(/viewer_id=(\d+)/);
         var id = undefined;
-        if(match) id = match[1];
+        if (match) id = match[1];
 
         var script = document.createElement('script');
         script.type = "application/javascript";
