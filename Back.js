@@ -14,7 +14,7 @@ const allowedPublics = ["22751485"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
 
 fastify.register(require('fastify-cors'), {
-  origin: false,
+  origin: true,
   methods: ['POST'],
 });
 
