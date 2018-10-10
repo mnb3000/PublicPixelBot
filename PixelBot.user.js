@@ -20,7 +20,7 @@ function PixelBot() {
 
     PixelBot.url = {
         script: window.botUrl,
-        image: 'https://pixel.codepaste.me/image.png'
+        image: 'http://shampinion.cf/controlImage.png'
     };
 
     PixelBot.urlGen = {
@@ -31,6 +31,21 @@ function PixelBot() {
             return PixelBot.url.image + '?v=' + Math.random();
         }
     };
+
+    var palette = ["#ffffff", "#c5d2e0", "#999999", "#333333", "#000000", "#94E044", "#4bb34b", "#5CBF0D", "#FDCB5D", "#FFA75F", "#ffa000", "#FF727D", "#fe0100", "#DB2735", "#CD3EE7", "#A32AB9", "#70B6F7", "#488dcf", "#1893E1"]
+
+        function getColorId(pixel) {
+        let color_id = -1;
+        let score = 768;
+        palette.forEach(function(item, i) {
+            let scrnow = Math.abs(pixel[0] - item[0]) + Math.abs(pixel[1] - item[1]) + Math.abs(pixel[2] - item[2]);
+            if (scrnow < score) {
+                score = scrnow;
+                color_id = i;
+            }
+        });
+        return color_id;
+    }
 
     PixelBot.refreshTime = 300;
 
