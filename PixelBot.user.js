@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name          Pixel Bot
+// @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.75
+// @version      0.1
 // @description  try to take over the world!
-// @author       Flyink13, DarkKeks
+// @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
-// @downloadURL  https://pixel.codepaste.me/script.user.js
-// @updateURL    https://pixel.codepaste.me/script.user.js
+// @downloadURL  https://github.com/mnb3000/PublicPixelBot/raw/master/PixelBot.user.js
+// @updateURL    https://github.com/mnb3000/PublicPixelBot/raw/master/PixelBot.user.js
 // @grant        none
 // ==/UserScript==
 
