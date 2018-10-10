@@ -9,12 +9,19 @@ const fastify = require('fastify')({
 });
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const TelegramBot = require('node-telegram-bot-api');
+
+// replace the value below with the Telegram token you receive from @BotFather
+const token = '669298066:AAGEeXEXbUcAmJ5skw3goYhTupehgeKOi1s';
+
+// Create a bot that uses 'polling' to fetch new updates
+const bot = new TelegramBot(token, {polling: true});
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 db.defaults({ users: [] }).write();
 
-const allowedPublics = ["22751485"];
+const allowedPublics = ["22751485", "57536014"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
 
 fastify.register(require('fastify-cors'), {
@@ -61,4 +68,9 @@ fastify.post('/start', startOpts, (request, reply) => {
 fastify.listen(8080, '0.0.0.0', (err, address) => {
   if (err) throw err;
   fastify.log.info(`server listening on ${address}`)
+});
+
+bot.onText(/^\/count$/, async (msg) => {
+  const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 60000)).value();
+  await bot.sendMessage(msg.chat.id, `Активных ботов на данный момент: ${activeUsers.length}`);
 });
