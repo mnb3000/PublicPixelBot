@@ -16,7 +16,6 @@ const allowedImageUrl = "http://shampinion.cf/controlImage.png";
 fastify.register(require('fastify-cors'), {
   origin: true,
   methods: ['POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
 });
 
 const startOpts = {
