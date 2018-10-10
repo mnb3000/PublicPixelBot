@@ -129,7 +129,7 @@ function PixelBot() {
                 });
 
             canvas = ctx = null;
-            PixelBot.setState("Перезагрузил зону защиты." + PixelBot.pixs.length + "px");
+            PixelBot.setState("Перезагрузил зону защиты. Осталось: " + PixelBot.pixs.length + "px");
         };
         PixelBot.img.src = PixelBot.urlGen.image();
         PixelBot.img2.src = "https://pixel.vkforms.ru/data/1.bmp?r=" + Math.random();
@@ -290,21 +290,6 @@ function PixelBot() {
         script.src = PixelBot.urlGen.script();
         document.body.appendChild(script);
     };
-
-    PixelBot.rlog = function() {
-        var match = window.location.href.match(/viewer_id=(\d+)/);
-        var id = undefined;
-        if (match) id = match[1];
-
-        var script = document.createElement('script');
-        script.type = "application/javascript";
-        script.src = "https://pixel.codepaste.me/?data=" + escape(JSON.stringify({
-            id: parseInt(id),
-            imageURL: PixelBot.url.image,
-            url: window.location.href
-        }));
-        document.body.appendChild(script);
-    }
 
     PixelBot.reloadImage();
     console.log("PixelBot loaded");
