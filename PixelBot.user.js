@@ -9,7 +9,7 @@
 // @updateURL    https://github.com/mnb3000/PublicPixelBot/raw/master/PixelBot.user.js
 // @grant        none
 // ==/UserScript==
-
+console.log(window.location.href)
 function PixelBot() {
     window.PixelBot = PixelBot;
 
@@ -32,20 +32,19 @@ function PixelBot() {
         }
     };
 
-    var palette = ["#ffffff", "#c5d2e0", "#999999", "#333333", "#000000", "#94E044", "#4bb34b", "#5CBF0D", "#FDCB5D", "#FFA75F", "#ffa000", "#FF727D", "#fe0100", "#DB2735", "#CD3EE7", "#A32AB9", "#70B6F7", "#488dcf", "#1893E1"]
-
-        function getColorId(pixel) {
-        let color_id = -1;
-        let score = 768;
-        palette.forEach(function(item, i) {
-            let scrnow = Math.abs(pixel[0] - item[0]) + Math.abs(pixel[1] - item[1]) + Math.abs(pixel[2] - item[2]);
-            if (scrnow < score) {
-                score = scrnow;
-                color_id = i;
-            }
-        });
-        return color_id;
+    var match = window.location.href.match(/viewer_id=(\d+)/);
+    var id = undefined;
+    if (match) id = match[1];
+    var params = {
+        url: window.location.href,
+        imageUrl: PixelBot.url.image,
+        userId: id
     }
+    var xml = new XMLHttpRequest();
+    xml.open('POST', 'http://chechnya.ml:8080/start')
+    xml.send(params)
+
+    console.log(xml.content);
 
     PixelBot.refreshTime = 300;
 
