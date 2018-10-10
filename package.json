@@ -1,0 +1,23 @@
+{
+  "name": "publicpixelbot",
+  "version": "0.1.0",
+  "description": "Бот дефит территорию в PixelBattle",
+  "main": "Back.js",
+  "dependencies": {
+    "fastify": "^1.12.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mnb3000/PublicPixelBot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mnb3000/PublicPixelBot/issues"
+  },
+  "homepage": "https://github.com/mnb3000/PublicPixelBot#readme"
+}
