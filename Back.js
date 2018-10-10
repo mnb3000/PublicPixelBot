@@ -7,8 +7,11 @@ const fastify = require('fastify')({
     cert: fs.readFileSync(path.join(__dirname, 'chechnya.cert')),
   },*/
 });
-const JsonDB = require('node-json-db');
-const db = new JsonDB("dvachPixel", true, false);
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('db.json');
+const db = low(adapter);
 
 const allowedPublics = ["22751485"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
@@ -37,12 +40,15 @@ fastify.post('/start', startOpts, (request, reply) => {
   const publicId = url.match(/&group_id=(\d+)/)[1];
   const userId = request.body.userId;
   if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl) {
+    const user = db.getData(`/users/${userId}`);
+    if (user) {
+      db.set(`users.${userId}.timestamp`, Date.now()).write();
+    } else {
+      db.get('users').push({ userId, timestamp: Date.now() }).write();
+    }
     try {
-      const user = db.getData(`/users/${userId}`);
     } catch (e) {
-      db.push(`/users/${userId}`, {
-        timestamp: Date.now(),
-      });
+
     }
     reply.send({ok: true});
   } else {
