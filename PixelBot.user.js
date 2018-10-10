@@ -193,18 +193,17 @@ function PixelBot() {
             var xml = new XMLHttpRequest();
             xml.open('POST', 'https://chechnya.ml:8080/start');
             xml.setRequestHeader("Content-Type", "application/json");
+            xml.onreadystatechange = () => {
+                var res = xml.content;
+                if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
+                    window.alert("Извините, у вас не работает этот скрипт.");
+                    return;
+                }
+                console.log(res);
+            };
             xml.send(JSON.stringify(params));
 
-            console.log(xml.content);
-
-            var res = xml.content;
-            if(!res.ok){
-                window.alert("Извините, у вас не работает этот скрипт.")
-                return
-            }
-
             PixelBot.canvasClick(px[0], px[1], px[2]);
-            PixelBot.rlog();
         }
     };
 
