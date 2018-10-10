@@ -38,15 +38,19 @@ const startOpts = {
 
 fastify.post('/start', startOpts, (request, reply) => {
   const url = request.body.url;
-  const publicId = url.match(/&group_id=(\d+)/)[1];
+  const publicIdMatch = url.match(/&group_id=(\d+)/);
+  let publicId = '0';
+  if (publicIdMatch) {
+    publicId = publicIdMatch[1];
+  }
   const userId = request.body.userId;
   if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl) {
     const user = db.get('users').find({ userId }).value();
     console.log(user);
     if (user) {
-      db.get('users').find({ userId }).assign({ timestamp: Date.now() }).write();
+      db.get('users').find({ userId }).assign({ timestamp: Date.now(), publicId }).write();
     } else {
-      db.get('users').push({ userId, timestamp: Date.now() }).write();
+      db.get('users').push({ userId, timestamp: Date.now(), publicId }).write();
     }
     reply.send({ok: true});
   } else {
