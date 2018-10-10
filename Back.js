@@ -12,6 +12,7 @@ const FileSync = require('lowdb/adapters/FileSync');
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
+db.defaults({ users: [] }).write();
 
 const allowedPublics = ["22751485"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
@@ -41,14 +42,11 @@ fastify.post('/start', startOpts, (request, reply) => {
   const userId = request.body.userId;
   if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl) {
     const user = db.get('users').find({ userId }).value();
+    console.log(user);
     if (user) {
-      db.set(`users.${userId}.timestamp`, Date.now()).write();
+      db.get('users').find({ userId }).assign({ timestamp: Date.now() }).write();
     } else {
       db.get('users').push({ userId, timestamp: Date.now() }).write();
-    }
-    try {
-    } catch (e) {
-
     }
     reply.send({ok: true});
   } else {
