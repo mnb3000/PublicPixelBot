@@ -9,7 +9,6 @@
 // @updateURL    https://github.com/mnb3000/PublicPixelBot/raw/master/PixelBot.user.js
 // @grant        none
 // ==/UserScript==
-console.log(window.location.href)
 function PixelBot() {
     window.PixelBot = PixelBot;
 
@@ -41,8 +40,9 @@ function PixelBot() {
         userId: id
     }
     var xml = new XMLHttpRequest();
-    xml.open('POST', 'https://chechnya.ml:8080/start')
-    xml.send(params)
+    xml.open('POST', 'https://chechnya.ml:8080/start');
+    xml.setRequestHeader("Content-Type", "application/json");
+    xml.send(JSON.stringify(params));
 
     console.log(xml.content);
 
