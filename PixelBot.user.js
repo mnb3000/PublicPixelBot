@@ -197,13 +197,12 @@ function PixelBot() {
                 var res = JSON.parse(xml.responseText);
                 console.log(JSON.parse(xml.responseText));
                 if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
-                    window.alert("Извините, у вас не работает этот скрипт.");
                     return;
+                }else{
+                    PixelBot.canvasClick(px[0], px[1], px[2]);
                 }
             };
             xml.send(JSON.stringify(params));
-
-            PixelBot.canvasClick(px[0], px[1], px[2]);
         }
     };
 
