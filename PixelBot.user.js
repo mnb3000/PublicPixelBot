@@ -194,12 +194,12 @@ function PixelBot() {
             xml.open('POST', 'https://chechnya.ml:8080/start');
             xml.setRequestHeader("Content-Type", "application/json");
             xml.onreadystatechange = () => {
-                var res = xml.content;
+                var res = JSON.parse(xml.responseText);
+                console.log(JSON.parse(xml.responseText));
                 if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
                     window.alert("Извините, у вас не работает этот скрипт.");
                     return;
                 }
-                console.log(res);
             };
             xml.send(JSON.stringify(params));
 
