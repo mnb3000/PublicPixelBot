@@ -40,7 +40,7 @@ fastify.post('/start', startOpts, (request, reply) => {
   const publicId = url.match(/&group_id=(\d+)/)[1];
   const userId = request.body.userId;
   if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl) {
-    const user = db.getData(`/users/${userId}`);
+    const user = db.get('users').find({ userId }).value();
     if (user) {
       db.set(`users.${userId}.timestamp`, Date.now()).write();
     } else {
