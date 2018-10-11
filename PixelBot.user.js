@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.1.5
+// @version      0.2.0
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -30,15 +30,6 @@ function PixelBot() {
             return PixelBot.url.image + '?v=' + Math.random();
         }
     };
-
-    var match = window.location.href.match(/viewer_id=(\d+)/);
-    var id = undefined;
-    if (match) id = match[1];
-    var params = {
-        url: window.location.href,
-        imageUrl: PixelBot.url.image,
-        userId: id
-    }
 
     PixelBot.refreshTime = 300;
 
@@ -169,26 +160,28 @@ function PixelBot() {
             clientX: 0,
             clientY: 0
         };
-        var xml = new XMLHttpRequest();
-        xml.open('POST', 'https://chechnya.ml:8080/start');
-        xml.setRequestHeader("Content-Type", "application/json");
-        xml.onreadystatechange = () => {
-            var res = JSON.parse(xml.responseText);
-            console.log(JSON.parse(xml.responseText));
-            if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
-                return;
-            } else {
-                PixelBot.canvasEvent("mousedown", q);
-                PixelBot.canvasEvent("click", q);
-                PixelBot.canvasEvent("mousemove", q);
-                q.button = 0;
-                PixelBot.canvasEvent("mouseup", q);
-                qe(".App__confirm button").click();
-                var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
-                console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
-                PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
-            }
+        PixelBot.canvasEvent("mousedown", q);
+        PixelBot.canvasEvent("click", q);
+        PixelBot.canvasEvent("mousemove", q);
+        q.button = 0;
+        PixelBot.canvasEvent("mouseup", q);
+        qe(".App__confirm button").click();
+        var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
+        console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
+        PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
+
+        var match = window.location.href.match(/viewer_id=(\d+)/);
+        var id = undefined;
+        if (match) id = match[1];
+        var params = {
+            userId: id,
+            x,
+            y,
+            pxColor,
         };
+        var xml = new XMLHttpRequest();
+        xml.open('POST', 'https://chechnya.ml:8080/pixel');
+        xml.setRequestHeader("Content-Type", "application/json");
         xml.send(JSON.stringify(params));
     };
 
@@ -303,12 +296,32 @@ if (window.loaded) {
         script.appendChild(document.createTextNode('(' + PixelBot + ')();'));
         (document.body || document.head || document.documentElement).appendChild(script);
     };
+    var match = window.location.href.match(/viewer_id=(\d+)/);
+    var id = undefined;
+    if (match) id = match[1];
+    var params = {
+        url: window.location.href,
+        imageUrl: 'http://shampinion.cf/controlImage.png',
+        userId: id
+    };
 
-    if (document.readyState == 'complete') {
-        inject();
-    } else {
-        window.addEventListener("load", function() {
-            inject();
-        });
-    }
+    var xml = new XMLHttpRequest();
+    xml.open('POST', 'https://chechnya.ml:8080/start');
+    xml.setRequestHeader("Content-Type", "application/json");
+    xml.onreadystatechange = () => {
+        var res = JSON.parse(xml.responseText);
+        console.log(JSON.parse(xml.responseText));
+        if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
+            return;
+        } else {
+            if (document.readyState === 'complete') {
+                inject();
+            } else {
+                window.addEventListener("load", function() {
+                    inject();
+                });
+            }
+        }
+    };
+    xml.send(JSON.stringify(params));
 }

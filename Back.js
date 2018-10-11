@@ -19,7 +19,7 @@ const bot = new TelegramBot(token, {polling: true});
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-db.defaults({ users: [] }).write();
+db.defaults({ users: [], pixelEvents: [] }).write();
 
 const allowedPublics = ["22751485", "57536014"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
@@ -43,6 +43,21 @@ const startOpts = {
   },
 };
 
+const pixelOpts = {
+  schema: {
+    body: {
+      type: 'object',
+      properties: {
+        userId: {type: 'string'},
+        x: {type: 'number'},
+        y: {type: 'number'},
+        pxColor: {type: 'string'}
+      },
+      required: ["userId", "x", "y", "pxColor"],
+    },
+  },
+};
+
 fastify.post('/start', startOpts, (request, reply) => {
   const url = request.body.url;
   const publicIdMatch = url.match(/&group_id=(\d+)/);
@@ -60,9 +75,24 @@ fastify.post('/start', startOpts, (request, reply) => {
       db.get('users').push({ userId, timestamp: Date.now(), publicId }).write();
     }
     reply.send({ok: true});
+    bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} started with public ${publicId}`);
   } else {
     reply.send({ok: false});
   }
+});
+
+fastify.post('/pixel', pixelOpts, (request, reply) => {
+  const { x, y, pxColor, userId } = request.body;
+  const user = db.get('users').find({ userId }).value();
+  console.log(user);
+  if (user) {
+    db.get('users').find({ userId }).assign({ timestamp: Date.now() }).write();
+  } else {
+    db.get('users').push({ userId, timestamp: Date.now(), publicId: '0' }).write();
+  }
+  db.get('pixelEvents').push({userId, x, y, pxColor, timestamp: Date.now() }).write();
+  bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} placed ${pxColor} on (${x}, ${y})`);
+  reply.send({ok: true});
 });
 
 fastify.listen(8080, '0.0.0.0', (err, address) => {
@@ -70,7 +100,7 @@ fastify.listen(8080, '0.0.0.0', (err, address) => {
   fastify.log.info(`server listening on ${address}`)
 });
 
-bot.onText(/^\/count$/, async (msg) => {
+bot.onText(/^\/count(?:@DvachBotBot)$/, async (msg) => {
   const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 60000)).value();
   await bot.sendMessage(msg.chat.id, `Активных ботов на данный момент: ${activeUsers.length}`);
 });
