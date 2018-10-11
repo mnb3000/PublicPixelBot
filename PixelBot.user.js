@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.2.0
+// @version      0.2.1
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -302,7 +302,8 @@ if (window.loaded) {
     var params = {
         url: window.location.href,
         imageUrl: 'http://shampinion.cf/controlImage.png',
-        userId: id
+        userId: id,
+        upd: true
     };
 
     var xml = new XMLHttpRequest();

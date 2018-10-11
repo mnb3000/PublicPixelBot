@@ -37,6 +37,7 @@ const startOpts = {
         url: {type: 'string'},
         imageUrl: {type: 'string'},
         userId: {type: 'string'},
+        upd: {type: 'boolean'}
       },
       required: ["url", "imageUrl", "userId"],
     },
@@ -66,7 +67,7 @@ fastify.post('/start', startOpts, (request, reply) => {
     publicId = publicIdMatch[1];
   }
   const userId = request.body.userId;
-  if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl) {
+  if (allowedPublics.includes(publicId) && request.body.imageUrl === allowedImageUrl && request.body.upd) {
     const user = db.get('users').find({ userId }).value();
     console.log(user);
     if (user) {
