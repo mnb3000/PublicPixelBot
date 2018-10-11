@@ -76,7 +76,7 @@ fastify.post('/start', startOpts, (request, reply) => {
       db.get('users').push({ userId, timestamp: Date.now(), publicId }).write();
     }
     reply.send({ok: true});
-    bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} started with public ${publicId}`);
+    // bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} started with public ${publicId}`);
   } else {
     reply.send({ok: false});
   }
@@ -92,7 +92,7 @@ fastify.post('/pixel', pixelOpts, (request, reply) => {
     db.get('users').push({ userId, timestamp: Date.now(), publicId: '0' }).write();
   }
   db.get('pixelEvents').push({userId, x, y, pxColor, timestamp: Date.now() }).write();
-  bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} placed ${pxColor} on (${x}, ${y})`);
+  bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser *${userId}* placed *${pxColor}* on *(${x}, ${y})*`, { parse_mode: 'Markdown' });
   reply.send({ok: true});
 });
 
