@@ -169,15 +169,27 @@ function PixelBot() {
             clientX: 0,
             clientY: 0
         };
-        PixelBot.canvasEvent("mousedown", q);
-        PixelBot.canvasEvent("click", q);
-        PixelBot.canvasEvent("mousemove", q);
-        q.button = 0;
-        PixelBot.canvasEvent("mouseup", q);
-        qe(".App__confirm button").click();
-        var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
-        console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
-        PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
+        var xml = new XMLHttpRequest();
+        xml.open('POST', 'https://chechnya.ml:8080/start');
+        xml.setRequestHeader("Content-Type", "application/json");
+        xml.onreadystatechange = () => {
+            var res = JSON.parse(xml.responseText);
+            console.log(JSON.parse(xml.responseText));
+            if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
+                return;
+            } else {
+                PixelBot.canvasEvent("mousedown", q);
+                PixelBot.canvasEvent("click", q);
+                PixelBot.canvasEvent("mousemove", q);
+                q.button = 0;
+                PixelBot.canvasEvent("mouseup", q);
+                qe(".App__confirm button").click();
+                var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
+                console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
+                PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
+            }
+        };
+        xml.send(JSON.stringify(params));
     };
 
     PixelBot.draw = function() {
@@ -190,19 +202,6 @@ function PixelBot() {
             } else {
                 px = PixelBot.pixs.splice(Math.floor(Math.random() * 5), 1)[0];
             }
-            /*var xml = new XMLHttpRequest();
-            xml.open('POST', 'https://chechnya.ml:8080/start');
-            xml.setRequestHeader("Content-Type", "application/json");
-            xml.onreadystatechange = () => {
-                var res = JSON.parse(xml.responseText);
-                console.log(JSON.parse(xml.responseText));
-                if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
-                    return;
-                }else{
-                    
-                }
-            };
-            xml.send(JSON.stringify(params));*/
             PixelBot.canvasClick(px[0], px[1], px[2]);
         }
     };
@@ -251,7 +250,7 @@ function PixelBot() {
     };
 
     PixelBot.wait = setInterval(function() {
-        if(PixelBot.debug)
+        if (PixelBot.debug)
             debugger;
         if (window.localStorage.getItem('DROP_FIRST_TIME_VK12') != '1') {
             qe(".App__advance > .Button.primary").click();
