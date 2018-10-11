@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -96,6 +96,17 @@ function PixelBot() {
         PixelBot.log(s);
     };
 
+    var palette = ["#ffffff", "#c5d2e0", "#999999", "#333333", "#000000", "#94e044", "#4bb34b", "#5cbf0d", "#fdcb5d", "#ffa75f", "#ffa000", "#ff727d", "#fe0100", "#db2735", "#cd3ee7", "#a32ab9", "#70b6f7", "#488dcf", "#1893e1"]
+
+    function rgbToHex(r, g, b) {
+        function componentToHex(c) {
+            var hex = c.toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        return ("#" + componentToHex(r) + componentToHex(g) + componentToHex(b)).toLowerCase();
+    }
+
     PixelBot.reloadImage = function() {
         PixelBot.img = new Image();
         PixelBot.img2 = new Image();
@@ -149,10 +160,10 @@ function PixelBot() {
         PixelBot.resetZoom();
         PixelBot.canvasMoveTo(0, 0);
         PixelBot.resetZoom(-200);
-        PixelBot.canvasMove(-5 * x + 5, -5 * y - 1);
+        PixelBot.canvasMove(-5 * x + 5 + PixelBot.canvas.width / 2, -5 * y - 1 + PixelBot.canvas.height / 2);
         var pxColor = PixelBot.getColor(PixelBot.ctx.getImageData(3, 3, 1, 1).data, 0);
-        var colorEl = qe('.color[style="background-color: ' + color + ';"]');
-        if (!colorEl) {
+        var colorN = PixelBot.getColorHex(color.trim().slice(4,-1).split(','));
+        if (colorN < 0) {
             console.log("Ошибка подбора цвета %c " + color, 'background:' + color + ';');
             PixelBot.setState("Ошибка подбора цвета " + color);
             return PixelBot.draw();
@@ -161,7 +172,9 @@ function PixelBot() {
             //PixelBot.setState("пропускаю " + x + "x" + y + " совпал цвет");
             return PixelBot.draw();
         }
-        colorEl.click();
+        var colEl = qe(".color--" + (colorN+1))
+        console.log(colEl, colorN);
+        colEl.click();
         var q = {
             bubbles: true,
             cancelable: true,
@@ -188,7 +201,7 @@ function PixelBot() {
             if (PixelBot.pixs.length < 5) {
                 px = PixelBot.pixs.shift();
             } else {
-                px = PixelBot.pixs.splice(Math.floor(Math.random() * 5), 1)[0];
+                px = PixelBot.pixs.splice(Math.floor(Math.random() * PixelBot.pixs.length-1), 1)[0];
             }
             var xml = new XMLHttpRequest();
             xml.open('POST', 'https://chechnya.ml:8080/start');
@@ -198,7 +211,7 @@ function PixelBot() {
                 console.log(JSON.parse(xml.responseText));
                 if (!(res.ok && xml.readyState === XMLHttpRequest.DONE && xml.status === 200)) {
                     return;
-                }else{
+                } else {
                     PixelBot.canvasClick(px[0], px[1], px[2]);
                 }
             };
@@ -229,6 +242,10 @@ function PixelBot() {
     PixelBot.getColor = function(data, i) {
         return "rgb(" + data[i] + ", " + data[i + 1] + ", " + data[i + 2] + ")";
     };
+    PixelBot.getColorHex = function(rgb){
+        console.log(rgbToHex(+rgb[0],+rgb[1],+rgb[2]))
+        return palette.indexOf(rgbToHex(+rgb[0],+rgb[1],+rgb[2]));
+    }
 
     PixelBot.resetZoom = function(d) {
         PixelBot.canvasEvent("mousewheel", {
@@ -250,7 +267,7 @@ function PixelBot() {
     };
 
     PixelBot.wait = setInterval(function() {
-        if(PixelBot.debug)
+        if (PixelBot.debug)
             debugger;
         if (window.localStorage.getItem('DROP_FIRST_TIME_VK12') != '1') {
             qe(".App__advance > .Button.primary").click();
