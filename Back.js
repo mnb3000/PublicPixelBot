@@ -110,3 +110,8 @@ bot.onText(/^\/pixels(?:@DvachBotBot)?/, async (msg) => {
   const pixels = db.get('pixelEvents').filter(o => o.timestamp > (Date.now() - 300000)).size().value();
   await bot.sendMessage(msg.chat.id, `За последние 5 минут нарисовано *${pixels}* пикселей`, { parse_mode: 'Markdown' });
 });
+
+bot.onText(/^\/pixelTotal(?:@DvachBotBot)?/, async (msg) => {
+  const pixels = db.get('pixelEvents').size().value();
+  await bot.sendMessage(msg.chat.id, `Всего с 23:00 11.10 ботами нарисовано *${pixels}* пикселей`, { parse_mode: 'Markdown' });
+});
