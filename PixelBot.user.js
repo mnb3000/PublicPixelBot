@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.2.1
+// @version      0.2.2
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -55,7 +55,8 @@ function PixelBot() {
         textAlign: "center",
         color: "#fff",
         position: "fixed",
-        zIndex: 10000
+        zIndex: 10000,
+        pointerEvents: "none"
     });
     document.body.appendChild(PixelBot.state);
 
