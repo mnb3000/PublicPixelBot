@@ -18,7 +18,7 @@ function PixelBot() {
     }
 
     PixelBot.url = {
-        script: 'https://github.com/mnb3000/PublicPixelBot/raw/master/PixelBot.user.js',
+        script: 'https://raw.githack.com/mnb3000/PublicPixelBot/master/PixelBot.user.js',
         image: 'http://shampinion.cf/controlImage.png'
     };
 
