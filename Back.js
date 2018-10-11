@@ -101,7 +101,12 @@ fastify.listen(8080, '0.0.0.0', (err, address) => {
   fastify.log.info(`server listening on ${address}`)
 });
 
-bot.onText(/^\/count(?:@DvachBotBot)$/, async (msg) => {
-  const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 60000)).value();
-  await bot.sendMessage(msg.chat.id, `Активных ботов на данный момент: ${activeUsers.length}`);
+bot.onText(/^\/count(?:@DvachBotBot)?$/, async (msg) => {
+  const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 80000)).value();
+  await bot.sendMessage(msg.chat.id, `Активных ботов на данный момент: *${activeUsers.length}*`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/pixels(?:@DvachBotBot)?/, async (msg) => {
+  const pixels = db.get('pixelEvents').filter(o => o.timestamp > (Date.now() - 300000)).size().value();
+  await bot.sendMessage(msg.chat.id, `За последние 5 минут нарисовано *${pixels}* пикселей`, { parse_mode: 'Markdown' });
 });
