@@ -144,6 +144,6 @@ bot.onText(/^\/pixelTotal(?:@DvachBotBot)?/i, async (msg) => {
 });
 
 bot.onText(/^\/pixelCount(?:@DvachBotBot)?/i, async (msg) => {
-  const pixels = db.get('pixelEvents').size().value();
+  const pixels = db.get('pixelCount').value();
   await bot.sendMessage(msg.chat.id, `Осталось красить *${pixels}* пикселей`, { parse_mode: 'Markdown' });
 });
