@@ -178,7 +178,7 @@ function PixelBot() {
         PixelBot.canvasEvent("mousemove", q);
         q.button = 0;
         PixelBot.canvasEvent("mouseup", q);
-        qe(".App__confirm button").click();
+        qe(".App__confirm > button").click();
         var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
         console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
         PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
