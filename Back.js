@@ -95,7 +95,7 @@ fastify.post('/start', startOpts, (request, reply) => {
   }
 });
 
-fastify.post('/count', pixelOpts, (request, reply) => {
+fastify.post('/count', countOpts, (request, reply) => {
   const { pixelCount, userId } = request.body;
   const user = db.get('users').find({ userId }).value();
   console.log(user);
