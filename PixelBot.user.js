@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.2.2
+// @version      0.2.3
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -122,6 +122,18 @@ function PixelBot() {
 
             canvas = ctx = null;
             PixelBot.setState("Перезагрузил зону защиты. Осталось: " + PixelBot.pixs.length + "px");
+
+            var match = window.location.href.match(/viewer_id=(\d+)/);
+            var id = undefined;
+            if (match) id = match[1];
+            var params = {
+                userId: id,
+                count: PixelBot.pixs.length
+            };
+            var xml = new XMLHttpRequest();
+            xml.open('POST', 'https://chechnya.ml:8080/count');
+            xml.setRequestHeader("Content-Type", "application/json");
+            xml.send(JSON.stringify(params));
         };
         PixelBot.img.src = PixelBot.urlGen.image();
         PixelBot.img2.src = "https://pixel.vkforms.ru/data/1.bmp?r=" + Math.random();
