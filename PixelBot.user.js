@@ -149,16 +149,48 @@ function PixelBot() {
         }
     };
 
-    PixelBot.canvasClick = function(x, y, color) {
+    PixelBot.zoomToPixel = function(x, y) {
         PixelBot.resetZoom();
         PixelBot.canvasMoveTo(0, 0);
         PixelBot.resetZoom(-200);
-        PixelBot.canvasMove(-5 * x + 5, -5 * y - 1);
-        var pxColor = PixelBot.getColor(PixelBot.ctx.getImageData(3, 3, 1, 1).data, 0);
+        if(y <= 200) {
+            PixelBot.canvasMove(-5 * x + 5, -5 * y - 1);
+            return PixelBot.getColor(PixelBot.ctx.getImageData(3, 3, 1, 1).data, 0);
+        } else {
+            y -= 100;
+            PixelBot.canvasMove(-5 * x + 5, -5 * y - 1);
+            return PixelBot.getColor(PixelBot.ctx.getImageData(3, 3 + 100 * 5, 1, 1).data, 0);
+        }
+    };
+
+    PixelBot.fieldClick = function(x, y) {
+        if(y > 200) {
+            y = 5 * 100;
+            x = 0;
+        } else {
+            x = y = 0;
+        }
+        var q = {
+            bubbles: true,
+            cancelable: true,
+            button: 1,
+            clientX: x || 0,
+            clientY: y || 0
+        };
+        PixelBot.canvasEvent("mousedown", q);
+        PixelBot.canvasEvent("click", q);
+        PixelBot.canvasEvent("mousemove", q);
+        q.button = 0;
+        PixelBot.canvasEvent("mouseup", q);
+    };
+
+    PixelBot.canvasClick = function(x, y, color) {
+        var pxColor = PixelBot.zoomToPixel(x, y);
         var colorEl = qe('.color[style="background-color: ' + color + ';"]');
+        console.log(colorEl);
         if (!colorEl) {
-            console.log("Ошибка подбора цвета %c " + color, 'background:' + color + ';');
-            PixelBot.setState("Ошибка подбора цвета " + color);
+            console.log("Ошибка подбора цвета " + x + "x" + y + " %c " + color, 'background:' + color + ';');
+            PixelBot.setState("Ошибка подбора цвета " + x + "x" + y + " -> " + color);
             return PixelBot.draw();
         } else if (pxColor == color) {
             //console.log("совпал цвет " + x + "x" + y + "%c " + pxColor, 'background:' + pxColor + ';');
@@ -166,23 +198,11 @@ function PixelBot() {
             return PixelBot.draw();
         }
         colorEl.click();
-        var q = {
-            bubbles: true,
-            cancelable: true,
-            button: 1,
-            clientX: 0,
-            clientY: 0
-        };
-        PixelBot.canvasEvent("mousedown", q);
-        PixelBot.canvasEvent("click", q);
-        PixelBot.canvasEvent("mousemove", q);
-        q.button = 0;
-        PixelBot.canvasEvent("mouseup", q);
-        qe(".App__confirm > button").click();
+        PixelBot.fieldClick(x, y);
+        qe(".App__confirm button").click();
         var xy = document.querySelectorAll(".App__statistic .value")[1].textContent;
         console.log(x + "x" + y + "%c " + pxColor + " > %c " + color + " " + xy, 'background:' + pxColor + ';', 'background:' + color + ';');
         PixelBot.setState("Поставил точку " + x + "x" + y + " " + xy);
-
         var match = window.location.href.match(/viewer_id=(\d+)/);
         var id = undefined;
         if (match) id = match[1];
