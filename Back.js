@@ -19,7 +19,7 @@ const bot = new TelegramBot(token, {polling: true});
 
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-db.defaults({ users: [], pixelEvents: [] }).write();
+db.defaults({ users: [], pixelEvents: [], pixelCount: 0 }).write();
 
 const allowedPublics = ["22751485", "57536014"];
 const allowedImageUrl = "http://shampinion.cf/controlImage.png";
@@ -59,6 +59,19 @@ const pixelOpts = {
   },
 };
 
+const countOpts = {
+  schema: {
+    body: {
+      type: 'object',
+      properties: {
+        userId: {type: 'string'},
+        pixelCount: {type: 'number'}
+      },
+      required: ['pixelCount', 'userId'],
+    },
+  },
+};
+
 fastify.post('/start', startOpts, (request, reply) => {
   const url = request.body.url;
   const publicIdMatch = url.match(/&group_id=(\d+)/);
@@ -78,6 +91,20 @@ fastify.post('/start', startOpts, (request, reply) => {
     reply.send({ok: true});
     // bot.sendMessage(-1001160236729, `${Math.floor(Date.now() / 1000)}\nUser ${userId} started with public ${publicId}`);
   } else {
+    reply.send({ok: false});
+  }
+});
+
+fastify.post('/count', pixelOpts, (request, reply) => {
+  const { pixelCount, userId } = request.body;
+  const user = db.get('users').find({ userId }).value();
+  console.log(user);
+  if (user) {
+    db.update('pixelCount', x => x + 1).write();
+    bot.sendMessage(-1001160236729, `User: *${userId}* pixel count: *${pixelCount}*`, { parse_mode: 'Markdown' });
+    reply.send({ok: true});
+  }
+   else {
     reply.send({ok: false});
   }
 });
@@ -113,5 +140,10 @@ bot.onText(/^\/pixels(?:@DvachBotBot)?/, async (msg) => {
 
 bot.onText(/^\/pixelTotal(?:@DvachBotBot)?/i, async (msg) => {
   const pixels = db.get('pixelEvents').size().value();
-  await bot.sendMessage(msg.chat.id, `Всего с 23:00 11.10 ботами нарисовано *${pixels}* пикселей`, { parse_mode: 'Markdown' });
+  await bot.sendMessage(msg.chat.id, `Всего с 7:40 12.10 ботами нарисовано *${pixels}* пикселей`, { parse_mode: 'Markdown' });
+});
+
+bot.onText(/^\/pixelCount(?:@DvachBotBot)?/i, async (msg) => {
+  const pixels = db.get('pixelEvents').size().value();
+  await bot.sendMessage(msg.chat.id, `Осталось красить *${pixels}* пикселей`, { parse_mode: 'Markdown' });
 });
