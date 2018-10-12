@@ -133,7 +133,7 @@ fastify.listen(8080, '0.0.0.0', (err, address) => {
 });
 
 bot.onText(/^\/count(?:@DvachBotBot)?$/, async (msg) => {
-  const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 80000)).value();
+  const activeUsers = db.get('users').filter(o => o.timestamp > (Date.now() - 60000)).value();
   await bot.sendMessage(msg.chat.id, `Активных ботов на данный момент: *${activeUsers.length}*`, { parse_mode: 'Markdown' });
 });
 
