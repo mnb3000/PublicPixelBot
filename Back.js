@@ -28,6 +28,10 @@ fastify.register(require('fastify-cors'), {
   origin: true,
   methods: ['POST', 'OPTIONS'],
 });
+fastify.register(require('fastify-static'), {
+  root: path.join(__dirname, 'public'),
+  prefix: '/public/'
+});
 
 const startOpts = {
   schema: {
