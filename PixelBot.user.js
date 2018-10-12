@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Pixel Bot (2ch edition)
 // @namespace    http://tampermonkey.net/
-// @version      0.2.3
+// @version      0.2.4
 // @description  try to take over the world!
 // @author       Flyink13, DarkKeks, TheGorox, mnb3000
 // @match        https://pixel.vkforms.ru/*
@@ -259,7 +259,7 @@ function PixelBot() {
         if (PixelBot.debug)
             debugger;
         if (window.localStorage.getItem('DROP_FIRST_TIME_VK12') != '1') {
-            qe(".App__advance > .Button.primary").click();
+             qe(".App__advance > button").click();
         } else if (window.localStorage.getItem('DROP_HEADER_VK12') != '1') {
             qe(".Header__close").click();
         } else if (!PixelBot.inited && PixelBot.canvas) {
