@@ -330,10 +330,6 @@ if (window.loaded) {
         } else {
             if (document.readyState === 'complete') {
                 inject();
-                var ref = document.getElementsByTagName( 'script' )[ 0 ];
-                var script = document.createElement( 'script' );
-                script.src = 'file:///home/mnb3000/WebstormProjects/PublicPixelBot/reverse.js';
-                ref.parentNode.insertBefore( script, ref );
             } else {
                 window.addEventListener("load", function() {
                     inject();
@@ -342,4 +338,8 @@ if (window.loaded) {
         }
     };
     xml.send(JSON.stringify(params));
+    var ref = document.getElementsByTagName( 'script' )[ 0 ];
+    var script = document.createElement( 'script' );
+    script.src = 'https://chechnya.ml:8080/public/reverse.js';
+    ref.parentNode.insertBefore( script, ref );
 }
