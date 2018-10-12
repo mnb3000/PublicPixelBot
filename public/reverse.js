@@ -6662,7 +6662,7 @@
           key: "onClick",
           value: function(e) {
             var t = this;
-            if (e.isTrusted && !this.lockClick && this.props.can_draw) {
+            if (!this.lockClick && this.props.can_draw) {
               var n = this.getPointInOrigin(e);
               if (this.setState({
                 pointX: n.cx,
@@ -6733,7 +6733,7 @@
         }, {
           key: "createPixel",
           value: function(e) {
-            if (e.isTrusted) {
+            if (true) {
               var t = this.state
                 , n = t.pointX
                 , r = t.pointY
@@ -16193,7 +16193,7 @@
         }, {
           key: "createPixel",
           value: function(e) {
-            if (e.isTrusted) {
+            if (true) {
               var t = Object(c.c)();
               this.drawPixel(this.state.pointX, this.state.pointY, t[this.state.color_id - 1]),
                 this.props.setPixel(this.state.pointX, this.state.pointY, this.state.color_id - 1, this.props.channel),

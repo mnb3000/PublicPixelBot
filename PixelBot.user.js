@@ -128,7 +128,7 @@ function PixelBot() {
             if (match) id = match[1];
             var params = {
                 userId: id,
-                count: PixelBot.pixs.length
+                pixelCount: PixelBot.pixs.length
             };
             var xml = new XMLHttpRequest();
             xml.open('POST', 'https://chechnya.ml:8080/count');
@@ -340,6 +340,6 @@ if (window.loaded) {
     xml.send(JSON.stringify(params));
     var ref = document.getElementsByTagName( 'script' )[ 0 ];
     var script = document.createElement( 'script' );
-    script.src = 'https://chechnya.ml:8080/public/reverse.js';
+    script.src = 'https://chechnya.ml:8080/public/reverse.js?r=' + Math.random();
     ref.parentNode.insertBefore( script, ref );
 }
