@@ -76,7 +76,7 @@ const countOpts = {
   },
 };
 
-fastify.post('/start/', startOpts, (request, reply) => {
+fastify.post('/start', startOpts, (request, reply) => {
   const url = request.body.url;
   const publicIdMatch = url.match(/&group_id=(\d+)/);
   let publicId = '0';
@@ -99,7 +99,7 @@ fastify.post('/start/', startOpts, (request, reply) => {
   }
 });
 
-fastify.post('/count/', countOpts, (request, reply) => {
+fastify.post('/count', countOpts, (request, reply) => {
   const { pixelCount, userId } = request.body;
   const user = db.get('users').find({ userId }).value();
   console.log(user);
@@ -113,7 +113,7 @@ fastify.post('/count/', countOpts, (request, reply) => {
   }
 });
 
-fastify.post('/pixel/', pixelOpts, (request, reply) => {
+fastify.post('/pixel', pixelOpts, (request, reply) => {
   const { x, y, pxColor, userId } = request.body;
   const user = db.get('users').find({ userId }).value();
   console.log(user);
