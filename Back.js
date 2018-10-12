@@ -104,7 +104,7 @@ fastify.post('/count', countOpts, (request, reply) => {
   const user = db.get('users').find({ userId }).value();
   console.log(user);
   if (user) {
-    db.update('pixelCount', x => x + 1).write();
+    db.update('pixelCount', x => pixelCount).write();
     bot.sendMessage(-1001160236729, `User: *${userId}* pixel count: *${pixelCount}*`, { parse_mode: 'Markdown' });
     reply.send({ok: true});
   }
